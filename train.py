@@ -48,7 +48,7 @@ def main():
         .apply(tf.data.experimental.dense_to_ragged_batch(batch_size=32, drop_remainder=True))
         .map(_map_model_input(vocab_table, label_table))
     )
-    dev_ds = dev_ds.apply(tf.data.experimental.dense_to_ragged_batch(batch_size=32, drop_remainder=True)).map(
+    dev_ds = dev_ds.apply(tf.data.experimental.dense_to_ragged_batch(batch_size=100)).map(
         _map_model_input(vocab_table, label_table)
     )
 
@@ -89,7 +89,7 @@ def main():
     )
 
     logging.info("Train model")
-    model.fit(train_ds, validation_data=dev_ds, epochs=3)
+    model.fit(train_ds, validation_data=dev_ds, epochs=3, callbacks=[tf.keras.callbacks.TensorBoard()])
     model.save_weights("./model/model")
 
 
